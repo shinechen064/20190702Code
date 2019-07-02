@@ -1,0 +1,12 @@
+#########
+### C#
+#########
+
+*.class
+
+# temp Files #
+*.user
+
+
+#logs
+**/obj/*
