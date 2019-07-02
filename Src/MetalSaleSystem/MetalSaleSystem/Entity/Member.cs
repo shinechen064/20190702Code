@@ -1,38 +1,104 @@
-﻿using Newtonsoft.Json;
+﻿using MetalSaleSystem.Service;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace MetalSaleSystem.Entity
 {
     /// <summary>
-    /// Json帮助类
+    /// Member会员类
     /// </summary>
     public class Member
     {
+        public Member()
+        {
+            id = "";
+            name = "";
+            cardNo = "";
+            jiFen = new MemberGrade();
+            discountCard = "";
+        }
+        public Member(string argID,string argName,string argCardNo,int argJiFen,string argDiscountCard)
+        {
+            id = argID;
+            name = argName;
+            cardNo = argCardNo;
+            jiFen = new MemberGrade(argJiFen);
+            discountCard = argDiscountCard;
+        }
         /// <summary>
         /// 会员ID
         /// </summary>
-        public string id;
+        private string id;
         /// <summary>
         /// 会员姓名
         /// </summary>
-        public string name;
-        /// <summary>
-        /// 会员等级
-        /// </summary>
-        public string grade;
+        private string name;
         /// <summary>
         /// 会员卡号
         /// </summary>
-        public string cardNo;
+        private string cardNo;
         /// <summary>
         ///会员积分
         /// </summary>
-        public string jiFen;
+        private MemberGrade jiFen;
         /// <summary>
         /// 会员优惠券
         /// </summary>
-        public string discountCard;
+        private string discountCard;
+
+        public string Id
+        {
+            get
+            {
+                return id;
+            }
+
+            set
+            {
+                id = value;
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+
+            set
+            {
+                name = value;
+            }
+        }
+        
+        public string CardNo
+        {
+            get
+            {
+                return cardNo;
+            }
+
+            set
+            {
+                cardNo = value;
+            }
+        }
+
+
+        public string DiscountCard
+        {
+            get
+            {
+                return discountCard;
+            }
+
+            set
+            {
+                discountCard = value;
+            }
+        }
     }
     
 }
