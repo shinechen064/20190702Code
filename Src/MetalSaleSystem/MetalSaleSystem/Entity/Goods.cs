@@ -49,15 +49,15 @@ namespace MetalSaleSystem.Entity
             set { price = value; }
         }
 
-        private string batchNo;
+        private string goodsNo;
 
         /// <summary>
         /// 编号
         /// </summary>
-        public string BatchNo
+        public string GoodsNo
         {
-            get { return batchNo; }
-            set { batchNo = value; }
+            get { return goodsNo; }
+            set { goodsNo = value; }
         }
 
         private Discount discount;
@@ -88,10 +88,10 @@ namespace MetalSaleSystem.Entity
 
     public enum OpenDoorRed
     {
-        Full3000 = "每满3000元减350",
-        Full2000 = "每满2000元减30",
-        Full1000 = "每满1000元减10",
-        Full3Half = "第3件半价",
-        Full3Give1 = "满3送1"
+        Full3000,
+        Full2000,
+        Full1000,
+        Full3Half,
+        Full3Give1
     }
 }

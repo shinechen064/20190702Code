@@ -53,6 +53,7 @@
     <Compile Include="Common\DataHelper.cs" />
     <Compile Include="Entity\MemberGradeEntity.cs" />
     <Compile Include="Entity\OrderInformation.cs" />
+    <Compile Include="Service\GoodsService.cs" />
     <Compile Include="Service\MemberGrade.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
