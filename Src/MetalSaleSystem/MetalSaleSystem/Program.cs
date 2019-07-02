@@ -1,5 +1,6 @@
 ﻿using MetalSaleSystem.Common;
 using MetalSaleSystem.Entity;
+using MetalSaleSystem.Service;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,6 +36,10 @@ namespace MetalSaleSystem
             ReadJsonData(strInputFile);
             //解析订单数据
             UnpackOrderData(m_sbFileContext.ToString());
+
+            Result result = new Result(m_objOrderInfo, m_sbFileContext.ToString());
+
+            
 
         }
         /// <summary>
@@ -101,16 +106,6 @@ namespace MetalSaleSystem
             return true;
         }
 
-        public static bool GeneratePrintDataByOrderInformation(OrderInformation objOI,string argOutputFile)
-        {
-            if(null==objOI||string.IsNullOrWhiteSpace(argOutputFile))
-            {
-                Console.WriteLine("GeneratePrintDataByOrderInformation argOutputFile or objOI is null or empty!");
-                return false;
-            }
-
-            return true;
-        }
     }
 
 }
