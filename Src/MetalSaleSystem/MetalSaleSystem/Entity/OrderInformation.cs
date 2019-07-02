@@ -1,12 +1,14 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace MetalSaleSystem.Entity
 {
     /// <summary>
-    /// Json帮助类
+    /// 订单信息类
     /// </summary>
+    [Serializable]
     public class OrderInformation
     {
         /// <summary>
