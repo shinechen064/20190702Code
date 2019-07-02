@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MetalSaleSystem.Common;
+using MetalSaleSystem.Entity;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,6 +12,9 @@ namespace MetalSaleSystem
     public class Program
     {
         private static StringBuilder m_sbFileContext;
+
+        private static OrderInformation m_objOrderInfo;
+
         static void Main(string[] args)
         {
             // 输入参数不合法
@@ -25,11 +30,15 @@ namespace MetalSaleSystem
                 Console.WriteLine("input file {0} is not exist!", strInputFile);
                 return;
             }
-            m_sbFileContext = new StringBuilder(); 
+            m_sbFileContext = new StringBuilder();
+            //读取文件的数据内容
+            ReadJsonData(strInputFile);
+            //解析订单数据
+            UnpackOrderData(m_sbFileContext.ToString());
 
         }
         /// <summary>
-        /// 读取配置文件并转换成字符串
+        /// 读取输入文件并转换成字符串
         /// </summary>
         /// <param name="argFile"></param>
         /// <returns></returns>
@@ -65,6 +74,41 @@ namespace MetalSaleSystem
             {
                 Console.WriteLine("ReadJsonData exception: {0}", ex);
             }
+            return true;
+        }
+        /// <summary>
+        /// 解析订单Json数据转换成对象
+        /// </summary>
+        /// <param name="argContext"></param>
+        /// <returns></returns>
+        public static bool UnpackOrderData(string argContext)
+        {
+            if(string.IsNullOrWhiteSpace(argContext))
+            {
+                Console.WriteLine("UnpackOrderData argContext is null or empty!");
+                return false;
+            }
+            try
+            {
+                m_objOrderInfo = JsonHelper.DeserializeJsonToObject<OrderInformation>(argContext);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("UnpackOrderData exception: {0}", ex);
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool GeneratePrintDataByOrderInformation(OrderInformation objOI,string argOutputFile)
+        {
+            if(null==objOI||string.IsNullOrWhiteSpace(argOutputFile))
+            {
+                Console.WriteLine("GeneratePrintDataByOrderInformation argOutputFile or objOI is null or empty!");
+                return false;
+            }
+
             return true;
         }
     }
