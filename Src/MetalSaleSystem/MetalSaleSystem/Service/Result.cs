@@ -17,6 +17,7 @@ namespace MetalSaleSystem.Service
         private List<Member> m_objListMember;
         private List<Goods> m_objListGoods ;
         private Member m_objCurMember;
+        private Goods m_objGoods;
         public Result(OrderInformation objOI,string argOutputFile)
         {
             if(string.IsNullOrWhiteSpace(argOutputFile))
@@ -84,19 +85,19 @@ namespace MetalSaleSystem.Service
         private void InitGoods()
         {
             m_objListGoods = new List<Goods>();
-            Goods goods = new Goods(1, "世园会五十国钱币册", "册", 998.00, "001001", Discount.Discount1, OpenDoorRed.Full);
+            Goods goods = new Goods(1, "世园会五十国钱币册", "册", 998.00, "001001", Discount.Discount100, OpenDoorRed.Full);
             m_objListGoods.Add(goods);
-            goods = new Goods(2, "2019北京世园会纪念银章大全40g", "盒", 1380.00, "001002", Discount.Discount9, OpenDoorRed.Full);
+            goods = new Goods(2, "2019北京世园会纪念银章大全40g", "盒", 1380.00, "001002", Discount.Discount90, OpenDoorRed.Full);
             m_objListGoods.Add(goods);
-            goods = new Goods(3, " 招财进宝", "条", 1580.00, "003001", Discount.Discount1, OpenDoorRed.Full);
+            goods = new Goods(3, " 招财进宝", "条", 1580.00, "003001", Discount.Discount100, OpenDoorRed.Full);
             m_objListGoods.Add(goods);
-            goods = new Goods(4, "水晶之恋", "册", 980.00, "003002", Discount.Discount1, OpenDoorRed.Full3Half | OpenDoorRed.Full3Give1);
+            goods = new Goods(4, "水晶之恋", "册", 980.00, "003002", Discount.Discount100, OpenDoorRed.Full3Half | OpenDoorRed.Full3Give1);
             m_objListGoods.Add(goods);
-            goods = new Goods(5, "中国经典钱币套装", "套", 998.00, "002002", Discount.Discount9 | Discount.Discount95, OpenDoorRed.Full);
+            goods = new Goods(5, "中国经典钱币套装", "套", 998.00, "002002", Discount.Discount90 | Discount.Discount95, OpenDoorRed.Full);
             m_objListGoods.Add(goods);
             goods = new Goods(6, "守扩之羽比翼双飞4.8g", "条", 1080.00, "002001", Discount.Discount95, OpenDoorRed.Full3Half | OpenDoorRed.Full3Give1);
             m_objListGoods.Add(goods);
-            goods = new Goods(7, "中国银象棋12g", "套", 698.00, "002003", Discount.Discount9, OpenDoorRed.Full3000 | OpenDoorRed.Full2000 | OpenDoorRed.Full1000);
+            goods = new Goods(7, "中国银象棋12g", "套", 698.00, "002003", Discount.Discount90, OpenDoorRed.Full3000 | OpenDoorRed.Full2000 | OpenDoorRed.Full1000);
             m_objListGoods.Add(goods);
 
         }
@@ -110,9 +111,15 @@ namespace MetalSaleSystem.Service
                     Member member = m_objListMember[i];
                     // 获取当前用户
                     m_objCurMember = new Member(member.Id, member.Name, member.CardNo, member.JiFen.GetJiFen(), m_objOrderInfo.memberId);
+                    break;
                 }
             }
             // 获取当前商品信息
+            foreach (Item item in m_objOrderInfo.items)
+            {
+                Goods goods = m_objListGoods.Find(c => c.GoodsNo.Equals(item.product));
+                break;
+            }
 
             return true;
         }

@@ -85,6 +85,14 @@ namespace MetalSaleSystem.Entity
             get { return openDoorRed; }
             set { openDoorRed = value; }
         }
+
+        private double totalPrice;
+
+        public double TotalPrice
+        {
+            get { return totalPrice; }
+            set { totalPrice = value; }
+        }
     }
 
     /// <summary>
