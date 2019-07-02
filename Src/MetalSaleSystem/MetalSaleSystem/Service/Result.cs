@@ -49,6 +49,13 @@ namespace MetalSaleSystem.Service
                 张三,钻石卡,9230009999,198860
              */
             Member member = new Member(0, "马丁", "6236609999", 9860,"");
+            m_objMember.Add(member);
+            member = new Member(0, "王立", "6630009999", 48860, "");
+            m_objMember.Add(member);
+            member = new Member(0, "李想", "8230009999", 98860, "");
+            m_objMember.Add(member);
+            member = new Member(0, "张三", "9230009999", 198860, "");
+            m_objMember.Add(member);
             try
             {
                 m_fsWriter = new FileStream(m_strOutputFile, FileMode.Create);
