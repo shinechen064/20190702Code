@@ -25,11 +25,13 @@ namespace MetalSaleSystem
                 Console.WriteLine("input file {0} is not exist!", strInputFile);
                 return;
             }
-            m_sbFileContext = new StringBuilder(); 
+            m_sbFileContext = new StringBuilder();
+            //读取文件的数据内容
+            ReadJsonData(strInputFile);
 
         }
         /// <summary>
-        /// 读取配置文件并转换成字符串
+        /// 读取输入文件并转换成字符串
         /// </summary>
         /// <param name="argFile"></param>
         /// <returns></returns>
@@ -65,6 +67,11 @@ namespace MetalSaleSystem
             {
                 Console.WriteLine("ReadJsonData exception: {0}", ex);
             }
+            return true;
+        }
+
+        public static bool UnpackOrderData()
+        {
             return true;
         }
     }

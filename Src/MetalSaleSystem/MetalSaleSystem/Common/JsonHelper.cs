@@ -1,48 +1,81 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 namespace MetalSaleSystem.Common
 {
-    public static class JsonHelper
+    /// <summary>
+    /// Json帮助类
+    /// </summary>
+    public class JsonHelper
     {
-        public static string JsonSerializeFormatDate(this object obj)
+        static JsonHelper()
         {
-            IsoDateTimeConverter timeFormat = new IsoDateTimeConverter();
-            timeFormat.DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
-
-            return JsonConvert.SerializeObject(obj, Newtonsoft.Json.Formatting.Indented, timeFormat);
+            s_jsonSettings.Formatting = Formatting.Indented;
+            s_jsonSettings.TypeNameHandling = TypeNameHandling.None;
+        }
+        /// <summary>
+        /// 将对象序列化为JSON格式
+        /// </summary>
+        /// <param name="o">对象</param>
+        /// <returns>json字符串</returns>
+        public static string SerializeObject(object argObject)
+        {
+            Debug.Assert(null != argObject);
+            return JsonConvert.SerializeObject(argObject, s_jsonSettings);
         }
 
         /// <summary>
-        /// 把json格式的时间\\/Date\((\d+)\+\d+\)\\/转为一般时间格式
+        /// 解析JSON字符串生成对象实体
         /// </summary>
-        /// <param name="m"></param>
-        /// <returns></returns>
-        public static string ConvertJsonDateToDateString(Match m)
+        /// <typeparam name="T">对象类型</typeparam>
+        /// <param name="json">json字符串(eg.{"ID":"112","Name":"石子儿"})</param>
+        /// <returns>对象实体</returns>
+        public static T DeserializeJsonToObject<T>(string argJson) where T : class
         {
-            string result = string.Empty;
-            DateTime dt = new DateTime(1970, 1, 1);
-            dt = dt.AddMilliseconds(long.Parse(m.Groups[1].Value));
-            dt = dt.ToLocalTime();
-            result = dt.ToString("yyyy-MM-dd HH:mm:ss");
-            return result;
+            //JsonSerializer serializer = new JsonSerializer();
+            //StringReader sr = new StringReader(json);
+            //object o = serializer.Deserialize(new JsonTextReader(sr), typeof(T));
+            //T t = o as T;
+            //return t;
+            Debug.Assert(!string.IsNullOrWhiteSpace(argJson));
+            return JsonConvert.DeserializeObject<T>(argJson);
         }
 
         /// <summary>
-        /// 把json格式的时间\\/Date\((\d+)\+\d+\)\\/转为一般时间格式
+        /// 解析JSON数组生成对象实体集合
         /// </summary>
-        /// <param name="json"></param>
-        /// <returns></returns>
-        public static string ConvertJsonDateToDateString(this string json)
+        /// <typeparam name="T">对象类型</typeparam>
+        /// <param name="json">json数组字符串(eg.[{"ID":"112","Name":"石子儿"}])</param>
+        /// <returns>对象实体集合</returns>
+        public static List<T> DeserializeJsonToList<T>(string argJson) where T : class
         {
-            ////替换Json的Date字符串 
-            string regTemp = @"\\/Date\((\d+)\+\d+\)\\/";
-            MatchEvaluator matchEvaluator = new MatchEvaluator(ConvertJsonDateToDateString);
-            Regex reg = new Regex(regTemp);
-            json = reg.Replace(json, matchEvaluator);
-            return json;
+            //JsonSerializer serializer = new JsonSerializer();
+            //StringReader sr = new StringReader(json);
+            //object o = serializer.Deserialize(new JsonTextReader(sr), typeof(List<T>));
+            //List<T> list = o as List<T>;
+            //return list;
+            Debug.Assert(!string.IsNullOrWhiteSpace(argJson));
+            object o = JsonConvert.DeserializeObject<T>(argJson);
+            return (o as List<T>);
         }
+
+        /// <summary>
+        /// 反序列化JSON到给定的匿名对象.
+        /// </summary>
+        /// <typeparam name="T">匿名对象类型</typeparam>
+        /// <param name="json">json字符串</param>
+        /// <param name="anonymousTypeObject">匿名对象</param>
+        /// <returns>匿名对象</returns>
+        public static T DeserializeAnonymousType<T>(string argJson, T anonymousTypeObject)
+        {
+            Debug.Assert(!string.IsNullOrWhiteSpace(argJson) && null != anonymousTypeObject);
+            return JsonConvert.DeserializeAnonymousType<T>(argJson, anonymousTypeObject);
+        }
+
+        public static JsonSerializerSettings s_jsonSettings = new JsonSerializerSettings();
     }
 }

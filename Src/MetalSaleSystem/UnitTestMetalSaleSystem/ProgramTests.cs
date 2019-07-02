@@ -11,7 +11,7 @@ namespace UnitTestMetalSaleSystem
         public void UnpackJsonData_StateUnderTest_ExpectedBehavior()
         {
             // Arrange
-            string argFile = @"D:\GITHub\20190702biancheng\20190702Code\Src\MetalSaleSystem\MetalSaleSystem\sample_command.json";
+            string argFile = "sample_command.json";
 
             // Act
             var result = Program.ReadJsonData(
