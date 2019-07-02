@@ -56,6 +56,7 @@ namespace MetalSaleSystem.Service
             m_objMember.Add(member);
             member = new Member(0, "张三", "9230009999", 198860, "");
             m_objMember.Add(member);
+
             try
             {
                 m_fsWriter = new FileStream(m_strOutputFile, FileMode.Create);
@@ -65,6 +66,12 @@ namespace MetalSaleSystem.Service
             {
 
             }
+        }
+
+        public bool GenerateResult()
+        {
+
+            return true;
         }
 
         /// <summary>
