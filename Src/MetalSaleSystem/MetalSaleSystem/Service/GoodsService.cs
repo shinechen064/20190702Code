@@ -9,50 +9,112 @@ namespace MetalSaleSystem.Service
 {
     public class GoodsService
     {
-        private List<Goods> listGoods;
-        private  Goods goods;
-        int goodsNumber = 0;
+        private List<Goods> m_objListGoods;
+        private  Goods m_objGoods;
+        int m_goodsNumber = 0;
         public GoodsService(List<Goods> listGoods, string goodsNo, int goodsNum)
         {
-            goods = listGoods.Find(c => c.GoodsNo.Equals(goodsNo));
-            goodsNumber = goodsNum;
+            m_objListGoods = listGoods;
+            m_objGoods = listGoods.Find(c => c.GoodsNo.Equals(goodsNo));
+            m_goodsNumber = goodsNum;
         }
-
-        /// <summary>
-        /// 获取单个产品价格
-        /// </summary>
-        /// <param name="goodNo"></param>
-        /// <returns></returns>
-        public double GetGoodsPrice(string goodNo)
+        public Goods GetCurrentGoods()
         {
-            double pirce = 0;
-            Goods goods = listGoods.Find(c => c.GoodsNo.Equals(goodNo));
-            pirce = goods.Price;
-            return pirce;
+            m_objGoods.TotalPrice = GetTotalPrice();
+            return m_objGoods;
+              
         }
+        // 获取当前商品的折扣
+        private double GetCurrentDiscountTotalPrice()
+        {
+            double DiscountPrice = 0;
+            if (m_objGoods.Discount == Discount.Discount90)
+            {
+                DiscountPrice = m_objGoods.Price * m_goodsNumber * 0.9;
+            }
+            else if (m_objGoods.Discount == (Discount.Discount95))
+            {
+                DiscountPrice = m_objGoods.Price * m_goodsNumber * 0.95;
+            }
+            else
+            {
+                DiscountPrice = m_objGoods.Price * m_goodsNumber;
+            }
+            return DiscountPrice;
+        }
+        // 获取当前商品的满减
+        private double GetCurrentOpenDoorRedTotalPrice()
+        {
+            double totalPrice = 0.0f;
+            // 不满减
+            double fullPrice = 0.0f;
+            double full1000Price = 0.0f;
+            double full2000Price = 0.0f;
+            double full3000Price = 0.0f;
+            double full3HalfPrice = 0.0f;
+            double full3Give1Price = 0.0f;
 
+            if ((m_objGoods.OpenDoorRed & OpenDoorRed.Full)==OpenDoorRed.Full)
+            {
+                fullPrice = m_objGoods.Price * m_goodsNumber;
+            }
+            if ((m_objGoods.OpenDoorRed & OpenDoorRed.Full1000) == OpenDoorRed.Full1000)
+            {
+                double temp = m_objGoods.Price * m_goodsNumber;
+                full1000Price = temp-((temp) /1000)*10;
+            }
+            if ((m_objGoods.OpenDoorRed & OpenDoorRed.Full2000) == OpenDoorRed.Full2000)
+            {
+                double temp = m_objGoods.Price * m_goodsNumber;
+                full2000Price = temp - ((temp) / 2000) * 30;
+            }
+            if ((m_objGoods.OpenDoorRed & OpenDoorRed.Full3000) == OpenDoorRed.Full3000)
+            {
+                double temp = m_objGoods.Price * m_goodsNumber;
+                full3000Price = temp - ((temp) / 3000) * 350;
+            }
+            if ((m_objGoods.OpenDoorRed & OpenDoorRed.Full3Half) == OpenDoorRed.Full3Half)
+            {
+                double temp = m_objGoods.Price * m_goodsNumber;
+                if (m_goodsNumber >= 3)
+                {
+                    full3HalfPrice = temp - m_objGoods.Price/2;
+                }
+                else
+                {
+                    full3HalfPrice = temp;
+                }
+            }
+            if ((m_objGoods.OpenDoorRed & OpenDoorRed.Full3Give1) == OpenDoorRed.Full3Give1)
+            {
+                double temp = m_objGoods.Price * m_goodsNumber;
+                if (m_goodsNumber > 3)
+                {
+                    full3Give1Price = temp - m_objGoods.Price;
+                }
+                else
+                {
+                    full3Give1Price = temp;
+                }
+            }
+            totalPrice = fullPrice > full1000Price ? full1000Price : fullPrice;
+            totalPrice = totalPrice > full2000Price ? full2000Price : totalPrice;
+            totalPrice = totalPrice > full3000Price ? full3000Price : totalPrice;
+            totalPrice = totalPrice > full3HalfPrice ? full3HalfPrice : totalPrice;
+            totalPrice = totalPrice > full3Give1Price ? full3Give1Price : totalPrice;
+            return totalPrice;
+        }
 
         /// <summary>
         /// 获取订单金额
         /// </summary>
         /// <param name="orderInfo"></param>
-        public void GetTotalPrice()
+        private double GetTotalPrice()
         {
-            double DiscountPrice = 0;
-            if (goods.Discount == Discount.Discount9)
-            {
-                DiscountPrice = goods.Price * goodsNumber * 0.9;
-            }
-            else if (goods.Discount == (Discount.Discount95))
-            {
-                DiscountPrice = goods.Price * goodsNumber * 0.95;
-            }
-            else
-            {
-                DiscountPrice = goods.Price * goodsNumber;
-            }
+            double DiscountPrice = GetCurrentDiscountTotalPrice();
+            double OpenDoorRedPrice = GetCurrentOpenDoorRedTotalPrice();
 
-            
+            return DiscountPrice > OpenDoorRedPrice ? OpenDoorRedPrice : DiscountPrice;
         }
     }
 }
