@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MemberGrades>
+  <MemberGrade>
+    <Name>普卡</Name>
+    <Speed>1</Speed>
+    <Section>10000</Section>
+    <NextName>金卡</NextName>
+  </MemberGrade>
+  <MemberGrade>
+    <Name>金卡</Name>
+    <Speed>1</Speed>
+    <Section>10000-50000</Section>
+    <NextName>白金卡</NextName>
+  </MemberGrade>
+  <MemberGrade>
+    <Name>白金卡</Name>
+    <Speed>1.8</Speed>
+    <Section>50000-100000</Section>
+    <NextName>钻石卡</NextName>
+  </MemberGrade>
+  <MemberGrade>
+    <Name>钻石卡</Name>
+    <Speed>2</Speed>
+    <Section>100000</Section>
+    <NextName></NextName>
+  </MemberGrade>
+</MemberGrades>
