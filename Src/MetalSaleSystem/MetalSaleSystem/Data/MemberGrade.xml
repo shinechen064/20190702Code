@@ -3,25 +3,29 @@
   <MemberGrade>
     <Name>普卡</Name>
     <Speed>1</Speed>
-    <Section>10000</Section>
+    <Start>0</Start>
+    <End>10000</End>
     <NextName>金卡</NextName>
   </MemberGrade>
   <MemberGrade>
     <Name>金卡</Name>
     <Speed>1</Speed>
-    <Section>10000-50000</Section>
+    <Start>10000</Start>
+    <End>50000</End>
     <NextName>白金卡</NextName>
   </MemberGrade>
   <MemberGrade>
     <Name>白金卡</Name>
     <Speed>1.8</Speed>
-    <Section>50000-100000</Section>
+    <Start>50000</Start>
+    <End>100000</End>
     <NextName>钻石卡</NextName>
   </MemberGrade>
   <MemberGrade>
     <Name>钻石卡</Name>
     <Speed>2</Speed>
-    <Section>100000</Section>
+    <Start>100000</Start>
+    <End></End>
     <NextName></NextName>
   </MemberGrade>
 </MemberGrades>
