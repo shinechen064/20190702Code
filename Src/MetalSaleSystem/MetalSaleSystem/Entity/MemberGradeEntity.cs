@@ -14,7 +14,7 @@ namespace MetalSaleSystem.Entity
             白金卡：1.8倍基准积分，累计积分5万（含）-10万（不含）
             钻石卡：2倍基准积分，累计积分10万以上
          */
-        NORMAL = 0,
+        NORMAL,
         GOLD,
         PLATINUM,
         DIAMONDS

@@ -10,26 +10,26 @@ namespace MetalSaleSystem.Entity
     /// </summary>
     public class Member
     {
-        public Member()
-        {
-            id = "";
-            name = "";
-            cardNo = "";
-            jiFen = new MemberGrade();
-            discountCard = "";
-        }
-        public Member(string argID,string argName,string argCardNo,int argJiFen,string argDiscountCard)
+        //public Member()
+        //{
+        //    id = "";
+        //    name = "";
+        //    cardNo = "";
+        //    JiFen = new MemberGrade();
+        //    discountCard = "";
+        //}
+        public Member(int argID,string argName,string argCardNo,int argJiFen,string argDiscountCard)
         {
             id = argID;
             name = argName;
             cardNo = argCardNo;
-            jiFen = new MemberGrade(argJiFen);
+            JiFen = new MemberGrade(argJiFen);
             discountCard = argDiscountCard;
         }
         /// <summary>
         /// 会员ID
         /// </summary>
-        private string id;
+        private int id;
         /// <summary>
         /// 会员姓名
         /// </summary>
@@ -47,7 +47,7 @@ namespace MetalSaleSystem.Entity
         /// </summary>
         private string discountCard;
 
-        public string Id
+        public int Id
         {
             get
             {
@@ -97,6 +97,19 @@ namespace MetalSaleSystem.Entity
             set
             {
                 discountCard = value;
+            }
+        }
+
+        public MemberGrade JiFen
+        {
+            get
+            {
+                return jiFen;
+            }
+
+            set
+            {
+                jiFen = value;
             }
         }
     }
