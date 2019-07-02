@@ -72,7 +72,7 @@ namespace MetalSaleSystem.Service
             goods = new Goods(6, "守扩之羽比翼双飞4.8g", "条", 1080.00, "002001", Discount.Discount95, OpenDoorRed.Full3Half | OpenDoorRed.Full3Give1);
             listGoods.Add(goods);
             goods = new Goods(7, "中国银象棋12g", "套", 698.00, "002003", Discount.Discount9, OpenDoorRed.Full3000 | OpenDoorRed.Full2000 | OpenDoorRed.Full1000);
-            listGoods.Add(goods);
+            listGoods.Add(goods); 
 
             try
             {

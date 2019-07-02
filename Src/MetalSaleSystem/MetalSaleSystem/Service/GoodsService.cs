@@ -47,5 +47,17 @@ namespace MetalSaleSystem.Service
                 allPrice += GetGoodsPrice(item.product) * double.Parse(item.amount);
             }
         }
+
+        /// <summary>
+        /// 判断是否有折扣
+        /// </summary>
+        /// <returns></returns>
+        public bool IsDiscount(string goodNo)
+        {
+            bool isDiscount = false;
+            Goods goods = listGoods.Find(c => c.GoodsNo.Equals(goodNo));
+            if(goods.Discount)
+            return isDiscount;
+        }
     }
 }
