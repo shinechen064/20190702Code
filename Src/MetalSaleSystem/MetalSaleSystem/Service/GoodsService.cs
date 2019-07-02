@@ -10,9 +10,12 @@ namespace MetalSaleSystem.Service
     public class GoodsService
     {
         private List<Goods> listGoods;
-        public GoodsService(List<Goods> listGoods)
+        private  Goods goods;
+        int goodsNumber = 0;
+        public GoodsService(List<Goods> listGoods, string goodsNo, int goodsNum)
         {
-
+            goods = listGoods.Find(c => c.GoodsNo.Equals(goodsNo));
+            goodsNumber = goodsNum;
         }
 
         /// <summary>
@@ -23,13 +26,8 @@ namespace MetalSaleSystem.Service
         public double GetGoodsPrice(string goodNo)
         {
             double pirce = 0;
-            foreach (Goods goods in listGoods)
-            {
-                if (goods.GoodsNo == goodNo)
-                {
-                    pirce = goods.Price;
-                }
-            }
+            Goods goods = listGoods.Find(c => c.GoodsNo.Equals(goodNo));
+            pirce = goods.Price;
             return pirce;
         }
 
@@ -38,26 +36,23 @@ namespace MetalSaleSystem.Service
         /// 获取订单金额
         /// </summary>
         /// <param name="orderInfo"></param>
-        public void GetAllPrice(OrderInformation orderInfo)
+        public void GetTotalPrice()
         {
-            double allPrice = 0;
-            List<Item> listItem = orderInfo.items;
-            foreach (Item item in listItem)
+            double DiscountPrice = 0;
+            if (goods.Discount == Discount.Discount9)
             {
-                allPrice += GetGoodsPrice(item.product) * double.Parse(item.amount);
+                DiscountPrice = goods.Price * goodsNumber * 0.9;
             }
-        }
+            else if (goods.Discount == (Discount.Discount95))
+            {
+                DiscountPrice = goods.Price * goodsNumber * 0.95;
+            }
+            else
+            {
+                DiscountPrice = goods.Price * goodsNumber;
+            }
 
-        /// <summary>
-        /// 判断是否有折扣
-        /// </summary>
-        /// <returns></returns>
-        public bool IsDiscount(string goodNo)
-        {
-            bool isDiscount = false;
-            Goods goods = listGoods.Find(c => c.GoodsNo.Equals(goodNo));
-            if(goods.Discount)
-            return isDiscount;
+            
         }
     }
 }
