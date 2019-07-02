@@ -9,24 +9,11 @@ namespace MetalSaleSystem.Service
 {
     public class GoodsService
     {
-        /// <summary>
-        /// 商品价格
-        /// </summary>
-        private static readonly Dictionary<string, double> goodsInfo = new Dictionary<string, double>
+        private List<Goods> listGoods;
+        public GoodsService(List<Goods> listGoods)
         {
-                      { "001001",998.00 },
-                      { "001002", 1380.00 },
-                      { "003001", 1580.00 },
-                      { "003002", 980.00 },
-                      { "002002", 998.00 },
-                      { "002001", 1080.00 },
-                      { "002003", 698.00 }
-        };
 
-        private static readonly List<Goods> listGoods = new List<Goods>()
-        {
-             
-        };
+        }
 
         /// <summary>
         /// 获取单个产品价格
@@ -36,11 +23,11 @@ namespace MetalSaleSystem.Service
         public double GetGoodsPrice(string goodNo)
         {
             double pirce = 0;
-            foreach (KeyValuePair<string, double> kvp in goodsInfo)
+            foreach (Goods goods in listGoods)
             {
-                if (kvp.Key == goodNo)
+                if (goods.GoodsNo == goodNo)
                 {
-                    pirce = kvp.Value;
+                    pirce = goods.Price;
                 }
             }
             return pirce;
@@ -59,6 +46,18 @@ namespace MetalSaleSystem.Service
             {
                 allPrice += GetGoodsPrice(item.product) * double.Parse(item.amount);
             }
+        }
+
+        /// <summary>
+        /// 判断是否有折扣
+        /// </summary>
+        /// <returns></returns>
+        public bool IsDiscount(string goodNo)
+        {
+            bool isDiscount = false;
+            Goods goods = listGoods.Find(c => c.GoodsNo.Equals(goodNo));
+            if(goods.Discount)
+            return isDiscount;
         }
     }
 }
