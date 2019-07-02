@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace MetalSaleSystem.Service
 {
-    class GoodsService
+    public class GoodsService
     {
+        
     }
 }

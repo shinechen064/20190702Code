@@ -7,7 +7,7 @@ namespace MetalSaleSystem.Common
     {
         public List<MemberGradeEntity> GetMemberGradeData()
         {
-           
+            return null;
         }
     }
 }
