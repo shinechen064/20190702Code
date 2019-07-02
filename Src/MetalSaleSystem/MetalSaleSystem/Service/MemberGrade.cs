@@ -34,9 +34,34 @@ namespace MetalSaleSystem
             m_objGrade.JiFen += argAddJiFen;
             return m_objGrade.JiFen;
         }
+        
         public int GetJiFen()
         {
             return m_objGrade.JiFen;
+        }
+
+        public string GetGradeName(enumGradeLevel argGrade)
+        {
+            string gradeName = "";
+            switch (argGrade)
+            {
+                case enumGradeLevel.NORMAL:
+                    gradeName = "普卡";
+                    break;
+                case enumGradeLevel.GOLD:
+                    gradeName = "金卡";
+                    break;
+                case enumGradeLevel.PLATINUM:
+                    gradeName = "白金卡";
+                    break;
+                case enumGradeLevel.DIAMONDS:
+                    gradeName = "钻石卡";
+                    break;
+                default:
+                    gradeName = "普卡";
+                    break;
+            }
+            return gradeName;
         }
 
         public enumGradeLevel GetGradeLevel()
@@ -56,7 +81,7 @@ namespace MetalSaleSystem
         /// </summary>
         /// <param name="argJiFen"></param>
         /// <returns></returns>
-        private enumGradeLevel GetGradeLevel(int argJiFen)
+        public enumGradeLevel GetGradeLevel(int argJiFen)
         {
             if (argJiFen < (int)enumJiFen.LEVEL10000)
             {

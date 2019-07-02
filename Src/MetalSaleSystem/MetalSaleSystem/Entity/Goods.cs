@@ -28,6 +28,16 @@ namespace MetalSaleSystem.Entity
             get { return goodsId; }
             set { goodsId = value; }
         }
+        private int number;
+
+        /// <summary>
+        /// ID
+        /// </summary>
+        public int Number
+        {
+            get { return number; }
+            set { number = value; }
+        }
         private string goodsName;
 
         /// <summary>
@@ -92,6 +102,13 @@ namespace MetalSaleSystem.Entity
         {
             get { return totalPrice; }
             set { totalPrice = value; }
+        }
+        private double discountPrice;
+
+        public double DiscountPrice
+        {
+            get { return discountPrice; }
+            set { discountPrice = value; }
         }
     }
 

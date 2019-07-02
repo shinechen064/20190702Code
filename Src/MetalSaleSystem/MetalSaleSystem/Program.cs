@@ -37,9 +37,9 @@ namespace MetalSaleSystem
             //解析订单数据
             UnpackOrderData(m_sbFileContext.ToString());
 
-            Result result = new Result(m_objOrderInfo, m_sbFileContext.ToString());
+            Result result = new Result(m_objOrderInfo, strOutputFile);
 
-            
+            result.GenerateResult();
 
         }
         /// <summary>
@@ -68,7 +68,7 @@ namespace MetalSaleSystem
                     strTemp = sr.ReadLine();
                     while (null!= strTemp)
                     {
-                        strTemp = strTemp.Replace(" ", "");
+                        //strTemp = strTemp.Replace(" ", "");
                         m_sbFileContext.Append(strTemp);
                         strTemp = sr.ReadLine();
                     }

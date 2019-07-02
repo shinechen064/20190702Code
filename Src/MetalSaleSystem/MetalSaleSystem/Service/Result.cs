@@ -15,12 +15,13 @@ namespace MetalSaleSystem.Service
         private StreamWriter m_swWriter;
         private OrderInformation m_objOrderInfo;
         private List<Member> m_objListMember;
-        private List<Goods> m_objListGoods ;
+        private List<Goods> m_objListGoods;
+        private List<Goods> m_objSalesGoods;
         private Member m_objCurMember;
         private Goods m_objGoods;
-        public Result(OrderInformation objOI,string argOutputFile)
+        public Result(OrderInformation objOI, string argOutputFile)
         {
-            if(string.IsNullOrWhiteSpace(argOutputFile))
+            if (string.IsNullOrWhiteSpace(argOutputFile))
             {
                 m_strOutputFile = "Result.txt";
             }
@@ -35,29 +36,30 @@ namespace MetalSaleSystem.Service
             InitGoods();
 
             Init();
+            GetCurrentMemberAndGoods();
         }
         /// <summary>
         /// 初始化
         /// </summary>
         private void Init()
         {
-            if(string.IsNullOrWhiteSpace(m_strOutputFile))
+            if (string.IsNullOrWhiteSpace(m_strOutputFile))
             {
                 m_strOutputFile = "Result.txt";
             }
-            if(!File.Exists(m_strOutputFile))
+            if (!File.Exists(m_strOutputFile))
             {
                 File.Create(m_strOutputFile);
             }
-           
 
-           
+
+
             try
             {
                 m_fsWriter = new FileStream(m_strOutputFile, FileMode.Create);
                 m_swWriter = new StreamWriter(m_fsWriter);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -79,7 +81,7 @@ namespace MetalSaleSystem.Service
             m_objListMember.Add(member);
             member = new Member(0, "张三", "9230009999", 198860, "");
             m_objListMember.Add(member);
-            
+
         }
 
         private void InitGoods()
@@ -104,21 +106,30 @@ namespace MetalSaleSystem.Service
 
         private bool GetCurrentMemberAndGoods()
         {
-            for(int i=0;i<m_objListMember.Count;++i)
+            for (int i = 0; i < m_objListMember.Count; ++i)
             {
-                if(m_objOrderInfo.memberId==m_objListMember[i].CardNo)
+                if (m_objOrderInfo.memberId == m_objListMember[i].CardNo)
                 {
                     Member member = m_objListMember[i];
+                    string strdiscountCard = "";
+                    if (m_objOrderInfo.discountCards.Length > 0)
+                    {
+                        strdiscountCard = m_objOrderInfo.discountCards[0];
+                    }
                     // 获取当前用户
-                    m_objCurMember = new Member(member.Id, member.Name, member.CardNo, member.JiFen.GetJiFen(), m_objOrderInfo.memberId);
+                    m_objCurMember = new Member(member.Id, member.Name, member.CardNo, member.JiFen.GetJiFen(), strdiscountCard);
                     break;
                 }
             }
+            m_objSalesGoods = new List<Goods>();
             // 获取当前商品信息
             foreach (Item item in m_objOrderInfo.items)
             {
-                Goods goods = m_objListGoods.Find(c => c.GoodsNo.Equals(item.product));
-                break;
+                int result = 0;
+                int.TryParse(item.amount, out result);
+                GoodsService goodService = new GoodsService(m_objListGoods, item.product, result);
+                Goods goods = goodService.GetCurrentGoods();
+                m_objSalesGoods.Add(goods);
             }
 
             return true;
@@ -126,7 +137,111 @@ namespace MetalSaleSystem.Service
 
         public bool GenerateResult()
         {
+            /**
+             * 方鼎银行贵金属购买凭证
 
+销售单号：0000001 日期：2019-07-02 15:00:00
+客户卡号：6236609999 会员姓名：马丁 客户等级：金卡 累计积分：19720
+
+商品及数量           单价         金额
+(001001)世园会五十国钱币册x2, 998.00, 1996.00
+(001002)2019北京世园会纪念银章大全40gx3, 1380.00, 4140.00
+(002002)中国经典钱币套装x1, 998.00, 998.00
+(002003)中国银象棋12gx5, 698.00, 3490.00
+合计：10624.00
+
+优惠清单：
+(001002)2019北京世园会纪念银章大全40g: -414.00
+(002003)中国银象棋12g: -350.00
+优惠合计：764.00
+
+应收合计：9860.00
+收款：
+ 9折券
+ 余额支付：9860.00
+
+客户等级与积分：
+ 新增积分：9860
+ 恭喜您升级为金卡客户！
+
+             * ***/
+            string strGoods = "";
+            string strDiscounts = "";
+            double totalPayPrice = 0.0f;
+            double totalDiscountPrice = 0.0f;
+            for (int i = 0; i < m_objSalesGoods.Count; ++i)
+            {
+                Goods goods = m_objSalesGoods[i];
+                strGoods += string.Format("({0}){1}x{2}, {3}, {4}", goods.GoodsNo, goods.GoodsName, goods.Number, goods.Price, (goods.TotalPrice + goods.DiscountPrice).ToString("F"));
+                if (goods.DiscountPrice > 0.0f)
+                {
+                    strDiscounts += string.Format("({0}){1}: -{2}", goods.GoodsNo, goods.GoodsName, goods.DiscountPrice.ToString("F"));
+                    if (i + 1 < m_objSalesGoods.Count)
+                    {
+                        strDiscounts += "\r\n";
+                    }
+                }
+
+                if (i + 1 < m_objSalesGoods.Count)
+                {
+                    strGoods += "\r\n";
+                }
+                totalPayPrice += goods.TotalPrice;
+                totalDiscountPrice += goods.DiscountPrice;
+            }
+
+            m_swWriter.WriteLine("方鼎银行贵金属购买凭证");
+            m_swWriter.WriteLine("");
+            m_swWriter.WriteLine(string.Format("销售单号：{0} 日期：{1}", m_objOrderInfo.orderId, m_objOrderInfo.createTime));
+            enumGradeLevel gradeLevel = m_objCurMember.JiFen.GetGradeLevel();
+            enumSpeed speed = m_objCurMember.JiFen.GetSpeed();
+            int jiFen = 0;
+
+            switch (speed)
+            {
+                case enumSpeed.SPEED1:
+                    jiFen = (int)(totalPayPrice * 1);
+                    break;
+                case enumSpeed.SPEED1_5:
+                    jiFen = (int)(totalPayPrice * 1.5);
+                    break;
+                case enumSpeed.SPEED1_8:
+                    jiFen = (int)(totalPayPrice * 1.8);
+                    break;
+                case enumSpeed.SPEED2:
+                    jiFen = (int)(totalPayPrice * 2);
+                    break;
+                default:
+                    jiFen = (int)(totalPayPrice * 1);
+                    break;
+            }
+            m_objCurMember.JiFen.AddJiFen(jiFen);
+            m_swWriter.WriteLine(string.Format("客户卡号：{0} 会员姓名：{1} 客户等级：{2} 累计积分：{3}", m_objCurMember.CardNo, m_objCurMember.Name, m_objCurMember.JiFen.GetGradeName(gradeLevel), m_objCurMember.JiFen.GetJiFen()));
+            m_swWriter.WriteLine("");
+            m_swWriter.WriteLine("商品及数量           单价         金额");
+            m_swWriter.WriteLine(strGoods);
+            m_swWriter.WriteLine("合计：" + (totalPayPrice + totalDiscountPrice).ToString("F"));
+            m_swWriter.WriteLine("");
+            m_swWriter.WriteLine("优惠清单：");
+            m_swWriter.WriteLine(strDiscounts);
+            m_swWriter.WriteLine("优惠合计：" + totalDiscountPrice.ToString("F"));
+            m_swWriter.WriteLine("");
+            m_swWriter.WriteLine("应收合计：" + totalPayPrice.ToString("F"));
+            m_swWriter.WriteLine("收款：");
+            if (m_objOrderInfo.discountCards.Length > 0)
+            {
+                m_swWriter.WriteLine(m_objOrderInfo.discountCards[0]);
+            }
+            m_swWriter.WriteLine("余额支付：" + totalPayPrice.ToString("F"));
+            m_swWriter.WriteLine("");
+            m_swWriter.WriteLine("客户等级与积分：");
+            m_swWriter.WriteLine("新增积分：" + jiFen);
+            enumGradeLevel newgradeLevel = m_objCurMember.JiFen.GetGradeLevel(m_objCurMember.JiFen.GetJiFen());
+            if (newgradeLevel == m_objCurMember.JiFen.GetNextGradeLevel())
+            {
+                m_swWriter.WriteLine("恭喜您升级为{0}客户！", m_objCurMember.JiFen.GetGradeName(newgradeLevel));
+            }
+            m_swWriter.Flush();
             return true;
         }
 
@@ -135,15 +250,15 @@ namespace MetalSaleSystem.Service
         /// </summary>
         private void Release()
         {
-            if(null!= m_objListMember)
+            if (null != m_objListMember)
             {
                 m_objListMember.Clear();
             }
-            if(null!=m_objListGoods)
+            if (null != m_objListGoods)
             {
                 m_objListGoods.Clear();
             }
-            if(null!=m_swWriter)
+            if (null != m_swWriter)
             {
                 m_swWriter.Close();
                 m_swWriter.Dispose();
@@ -158,5 +273,5 @@ namespace MetalSaleSystem.Service
         }
     }
 
-  
+
 }

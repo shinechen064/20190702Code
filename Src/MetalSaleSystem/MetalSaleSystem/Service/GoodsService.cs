@@ -10,7 +10,7 @@ namespace MetalSaleSystem.Service
     public class GoodsService
     {
         private List<Goods> m_objListGoods;
-        private  Goods m_objGoods;
+        private Goods m_objGoods;
         int m_goodsNumber = 0;
         public GoodsService(List<Goods> listGoods, string goodsNo, int goodsNum)
         {
@@ -20,9 +20,11 @@ namespace MetalSaleSystem.Service
         }
         public Goods GetCurrentGoods()
         {
+            m_objGoods.Number = m_goodsNumber;
             m_objGoods.TotalPrice = GetTotalPrice();
+            m_objGoods.DiscountPrice = (m_goodsNumber * m_objGoods.Price) - m_objGoods.TotalPrice;
             return m_objGoods;
-              
+
         }
         // 获取当前商品的折扣
         private double GetCurrentDiscountTotalPrice()
@@ -54,14 +56,14 @@ namespace MetalSaleSystem.Service
             double full3HalfPrice = 0.0f;
             double full3Give1Price = 0.0f;
 
-            if ((m_objGoods.OpenDoorRed & OpenDoorRed.Full)==OpenDoorRed.Full)
+            if ((m_objGoods.OpenDoorRed & OpenDoorRed.Full) == OpenDoorRed.Full)
             {
                 fullPrice = m_objGoods.Price * m_goodsNumber;
             }
             if ((m_objGoods.OpenDoorRed & OpenDoorRed.Full1000) == OpenDoorRed.Full1000)
             {
                 double temp = m_objGoods.Price * m_goodsNumber;
-                full1000Price = temp-((temp) /1000)*10;
+                full1000Price = temp - ((temp) / 1000) * 10;
             }
             if ((m_objGoods.OpenDoorRed & OpenDoorRed.Full2000) == OpenDoorRed.Full2000)
             {
@@ -78,7 +80,7 @@ namespace MetalSaleSystem.Service
                 double temp = m_objGoods.Price * m_goodsNumber;
                 if (m_goodsNumber >= 3)
                 {
-                    full3HalfPrice = temp - m_objGoods.Price/2;
+                    full3HalfPrice = temp - m_objGoods.Price / 2;
                 }
                 else
                 {
@@ -97,11 +99,27 @@ namespace MetalSaleSystem.Service
                     full3Give1Price = temp;
                 }
             }
-            totalPrice = fullPrice > full1000Price ? full1000Price : fullPrice;
-            totalPrice = totalPrice > full2000Price ? full2000Price : totalPrice;
-            totalPrice = totalPrice > full3000Price ? full3000Price : totalPrice;
-            totalPrice = totalPrice > full3HalfPrice ? full3HalfPrice : totalPrice;
-            totalPrice = totalPrice > full3Give1Price ? full3Give1Price : totalPrice;
+            totalPrice = fullPrice;
+            if (full1000Price > 0.0f)
+            {
+                totalPrice = fullPrice > full1000Price ? full1000Price : fullPrice;
+            }
+            if (full2000Price > 0.0f)
+            {
+                totalPrice = totalPrice > full2000Price ? full2000Price : totalPrice;
+            }
+            if (full3000Price > 0.0f)
+            {
+                totalPrice = totalPrice > full3000Price ? full3000Price : totalPrice;
+            }
+            if (full3HalfPrice > 0.0f)
+            {
+                totalPrice = totalPrice > full3HalfPrice ? full3HalfPrice : totalPrice;
+            }
+            if (full3Give1Price > 0.0f)
+            {
+                totalPrice = totalPrice > full3Give1Price ? full3Give1Price : totalPrice;
+            }
             return totalPrice;
         }
 
