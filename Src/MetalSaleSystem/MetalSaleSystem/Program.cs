@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MetalSaleSystem.Common;
+using MetalSaleSystem.Entity;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,6 +12,9 @@ namespace MetalSaleSystem
     public class Program
     {
         private static StringBuilder m_sbFileContext;
+
+        private static OrderInformation m_objOrderInfo;
+
         static void Main(string[] args)
         {
             // 输入参数不合法
@@ -28,6 +33,8 @@ namespace MetalSaleSystem
             m_sbFileContext = new StringBuilder();
             //读取文件的数据内容
             ReadJsonData(strInputFile);
+
+            UnpackOrderData(m_sbFileContext.ToString());
 
         }
         /// <summary>
@@ -70,8 +77,23 @@ namespace MetalSaleSystem
             return true;
         }
 
-        public static bool UnpackOrderData()
+        public static bool UnpackOrderData(string argContext)
         {
+            if(string.IsNullOrWhiteSpace(argContext))
+            {
+                Console.WriteLine("UnpackOrderData argContext is null or empty!");
+                return false;
+            }
+            try
+            {
+                m_objOrderInfo = JsonHelper.DeserializeJsonToObject<OrderInformation>(argContext);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("UnpackOrderData exception: {0}", ex);
+                return false;
+            }
+
             return true;
         }
     }

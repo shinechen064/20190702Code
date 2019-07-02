@@ -32,7 +32,7 @@ namespace MetalSaleSystem.Entity
         /// <summary>
         /// 优惠券信息
         /// </summary>
-        public string discountCards;
+        public string[] discountCards;
     }
 
     /// <summary>
@@ -51,11 +51,5 @@ namespace MetalSaleSystem.Entity
         public string type;
         public string amount;
     }
-    /// <summary>
-    /// 付款方式
-    /// </summary>
-    public class DiscountCard
-    {
-
-    }
+    
 }
