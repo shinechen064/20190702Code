@@ -30,7 +30,7 @@ namespace MetalSaleSystem
         {
             if(!File.Exists(argFile))
             {
-                Console.WriteLine("input file {0} is not exist!", argFile);
+                Console.WriteLine("UnpackJsonData input file {0} is not exist!", argFile);
                 return false;
             }
             return false;
