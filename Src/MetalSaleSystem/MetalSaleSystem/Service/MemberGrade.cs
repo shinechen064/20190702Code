@@ -20,6 +20,15 @@ namespace MetalSaleSystem
             enumSpeed objSpeed = GetSpeed(objLevel);
             m_objGrade = new MemberGradeEntity(objLevel, GetNextGradeLevel(objLevel),argJiFen,objSpeed);
         }
+        public MemberGrade Copy(MemberGrade argSource)
+        {
+            if (null != this && null != argSource)
+            {
+                this.m_objGrade.Copy(argSource.m_objGrade);
+            }
+            return this;
+        }
+
         public int AddJiFen(int argAddJiFen)
         {
             m_objGrade.JiFen += argAddJiFen;

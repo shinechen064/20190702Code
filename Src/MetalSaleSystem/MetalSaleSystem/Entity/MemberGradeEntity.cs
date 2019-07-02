@@ -68,6 +68,21 @@ namespace MetalSaleSystem.Entity
             jiFen = argJiFen;
             speed = argSpeed;
         }
+        public MemberGradeEntity Copy(MemberGradeEntity argsource)
+        {
+            if (null != this && null != argsource)
+            {
+                this.gradeId = argsource.GradeId;
+                this.gradeLevel = argsource.gradeLevel ;
+                this.start = argsource.start ;
+                this.end = argsource.end ;
+                this.nextGradeLevel = argsource.nextGradeLevel ;
+                this.jiFen = argsource.jiFen ;
+                this.speed = argsource.speed ;
+            }
+            return this;
+            
+        }
 
         private int gradeId;
         private enumGradeLevel gradeLevel;

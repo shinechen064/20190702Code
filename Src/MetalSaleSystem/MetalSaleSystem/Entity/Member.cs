@@ -26,6 +26,19 @@ namespace MetalSaleSystem.Entity
             JiFen = new MemberGrade(argJiFen);
             discountCard = argDiscountCard;
         }
+
+        public Member Copy(Member argSource)
+        {
+            if(null!=this&&null!=argSource)
+            {
+               this.Id  = argSource.Id;
+                this.Name = argSource.Name;
+                this.CardNo = argSource.CardNo;
+                this.DiscountCard = argSource.DiscountCard;
+                this.JiFen.Copy(argSource.JiFen);
+            }
+            return this;
+        }
         /// <summary>
         /// 会员ID
         /// </summary>
