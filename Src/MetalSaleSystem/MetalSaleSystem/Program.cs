@@ -33,7 +33,7 @@ namespace MetalSaleSystem
             m_sbFileContext = new StringBuilder();
             //读取文件的数据内容
             ReadJsonData(strInputFile);
-
+            //解析订单数据
             UnpackOrderData(m_sbFileContext.ToString());
 
         }
@@ -76,7 +76,11 @@ namespace MetalSaleSystem
             }
             return true;
         }
-
+        /// <summary>
+        /// 解析订单Json数据转换成对象
+        /// </summary>
+        /// <param name="argContext"></param>
+        /// <returns></returns>
         public static bool UnpackOrderData(string argContext)
         {
             if(string.IsNullOrWhiteSpace(argContext))
@@ -91,6 +95,17 @@ namespace MetalSaleSystem
             catch (Exception ex)
             {
                 Console.WriteLine("UnpackOrderData exception: {0}", ex);
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool GeneratePrintDataByOrderInformation(OrderInformation objOI,string argOutputFile)
+        {
+            if(null==objOI||string.IsNullOrWhiteSpace(argOutputFile))
+            {
+                Console.WriteLine("GeneratePrintDataByOrderInformation argOutputFile or objOI is null or empty!");
                 return false;
             }
 
