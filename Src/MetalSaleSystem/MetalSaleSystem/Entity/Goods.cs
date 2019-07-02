@@ -8,9 +8,15 @@ namespace MetalSaleSystem.Entity
 {
     public class Goods
     {
-        public Goods(int goodsId, string goodsName, string unit, double price, string goodsNo, Discount discount, OpenDoorRed openDoorRed)
+        public Goods(int argGoodsId, string argGoodsName, string argUnit, double argPrice, string argGoodsNo, Discount argDiscount, OpenDoorRed argOpenDoorRed)
         {
- 
+            goodsId = argGoodsId;
+            goodsName = argGoodsName;
+            unit = argUnit;
+            price = argPrice;
+            goodsNo = argGoodsNo;
+            discount = argDiscount;
+            openDoorRed = argOpenDoorRed;
         }
         private int goodsId;
 
@@ -87,8 +93,8 @@ namespace MetalSaleSystem.Entity
     public enum Discount
     {
         Discount95 = 95,
-        Discount9 = 9,
-        Discount1 = 1
+        Discount90 = 90,
+        Discount100 = 100
     }
 
     public enum OpenDoorRed
